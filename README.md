@@ -9,7 +9,8 @@ More information here: https://mind4stormwater.org/burnley-pond/
 ## Quirks (Arduino / MKR 1400 GSM)
 More information here: https://mind4stormwater.org/monitoring-systems/quirks/
 
-## Wetlandia (Pycom / Lopy4)
+## US Water level (Pycom / Lopy4)
+(Ultrasonic water level)
 More information here: https://mind4stormwater.org/monitoring-systems/wetlandia/
 
 # Mind4Stormwater project

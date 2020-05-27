@@ -2,6 +2,7 @@
  * Mind4Stormwater project: http://mind4stormwater.org, , feel free to use, reuse, modify, share!!
  * University of Melbourne / INSA Lyon
  * Frédéric Cherqui - fcherqui@gmail.com
+ * Thanks to Theo Perigaud and Kai James
  * ----- last version March 2020 ----
  * 
  * This code will fill up the calibration bench (PVC pipe), and then empty it while taking measurements at set increments

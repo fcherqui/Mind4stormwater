@@ -34,9 +34,9 @@ void InitHCSR04() {
 
 double measHCSR04(){
   digitalWrite(trigPin, LOW);
-  delay(2);
+  delayMicroseconds(2);
   digitalWrite(trigPin, HIGH);
-  delay(20);
+  delayMicroseconds(20);
   digitalWrite(trigPin, LOW);
   double duration = pulseIn(echoPin, HIGH);
   return duration;

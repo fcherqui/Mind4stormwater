@@ -1,5 +1,8 @@
 # Platform to assess the performance of low-cost sensors dedicated to water level monitoring
 
+# Processing needed
+You need to install and run the Processing software (available here : https://processing.org/) with the Arduino board connected via USB (and Arduino IDE closed to free the serial connection).
+
 # Description
 The development of new low-cost monitoring system requires extensive testing of potential sensors. Testing means:
 - assessing the performance of the sensor: precision, accuracy, range of utilisation,
@@ -9,3 +12,4 @@ The development of new low-cost monitoring system requires extensive testing of 
 We propose below a testing platform and its associated code to assess sensors used for water level monitoring. The whole physical platform is home-made and the system is controlled by an Arduino Uno which is connected to a computer to save all the measurements.
 
 ==> The full description of the platform is here: https://mind4stormwater.org/monitoring-systems/testing-platform/ <==
+

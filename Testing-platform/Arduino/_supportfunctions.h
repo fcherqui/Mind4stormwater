@@ -5,7 +5,7 @@
  */
 void initall() {
   Serial.begin(9600);
-  delay(60000); // wait if a new code needs to be uploaded to the board (default 10000)
+  delay(15000); // wait if a new code needs to be uploaded to the board (default 30000)
   while(!Serial);
   delay(1000); // allow time to start processing
   Serial.println(F(""));
@@ -17,23 +17,20 @@ void initall() {
   Serial.println(F("                                          **"));
   Serial.println(F("'*******************************************************************************"));
   Serial.println(F("'**EXPERIMENT PARAMETERS"));
-  Serial.print(F("'** Low_cost_sensor_to_test:"));
-  Serial.print(LCsensor);
-  Serial.println(F(":"));
-  if (LCsensor=="VL53l0x") {
-    Serial.print(F("'**** VL53l0x Long Range: "));
-    Serial.println(LONG_RANGE);
-    Serial.print(F("'**** VL53l0x High Accuracy: "));
-    Serial.println(HIGH_ACCURACY);
-    Serial.print(F("'**** VL53l0x High Speed: "));
-    Serial.println(HIGH_SPEED);
-  }
+  Serial.println("'** Low_cost_sensor_to_test:"+LCsensor+":"); //==> temporary change oto add "inside_tube"
+//  if (LCsensor=="VL53l0x") {
+//    Serial.print(F("'**** VL53l0x Long Range: "));
+//    Serial.println(LONG_RANGE);
+//    Serial.print(F("'**** VL53l0x High Accuracy: "));
+//    Serial.println(HIGH_ACCURACY);
+//    Serial.print(F("'**** VL53l0x High Speed: "));
+//    Serial.println(HIGH_SPEED);
+//  }
   Serial.print(F("'** Reference sensor: "));
   Serial.println(REFsensor);
   Serial.print(F("'** Stabilisation time for each level: "));
   Serial.print(String(STABILIZE_TIME/1000));
-  Serial.println(F(" seconds"));
-  Serial.print(F("'** Pump working time between each level : "));
+  Serial.print(F(" seconds\n'** Pump working time between each level : "));
   Serial.print(String(TIME_PUMP/1000));
   Serial.println(F(" seconds"));
   LOWER_LIM = max(0,LOWER_LIM);             //safety on the min lower limit
@@ -92,16 +89,12 @@ void initall() {
   }
 
   Serial.print(F("'** Starting the low cost sensors..."));
-  //Start the low-cost sensor choosen for the test
-  if (LCsensor=="JSN_SRT04") {InitJSNSRT04();}
-  if (LCsensor=="HC_SR04") {InitHCSR04();}
-  if (LCsensor=="VL53l0x") {InitVL53l0x();}
-  if (LCsensor=="MS5803_1A") {InitMS5803_1A();}
+  lowcosinit();
   Serial.println(F("ok!"));
 
   Serial.println("'** Filling the column until "+String(UPPER_LIM,3)+" m...");
   initialFillFunc();
   Serial.println(F("'**** Column ready!"));
-  delay(2000);
+  delay(1000);
 }
   

@@ -5,13 +5,6 @@
 #include <SDI12.h> //Library
 SDI12 mySDI12(DATA_PIN); // Define the SDI-12 bus
 
-//SDI 12 commands
-#define myComAdress   "?!"    //ask the adress of the probe
-#define myComId       "0I!"   //ask the identification
-#define myComMeasure  "0M!"   //ask to start a measurement
-#define myComSend     "0D0!"  //ask to send the measure
-#define myComUnit     "0OSU!" //ask for the unit of the measure, +0=m, +1=cm, +2=ft, +3=mbar, +4=psi
-
 String readsensor(){ //SDI 12 readings from the sensors
   String sdiResponse = "";
   delay(30);
@@ -24,12 +17,12 @@ String readsensor(){ //SDI 12 readings from the sensors
 
 void measREFsensor(){
   delay(500);
-  mySDI12.sendCommand(myComMeasure);
+  mySDI12.sendCommand("0M!"); //ask to start a measurement
   while(mySDI12.available()){ mySDI12.read();}    // write the response of the sensor
   delay(1000);
   mySDI12.clearBuffer();
   delay(500);
-  mySDI12.sendCommand(myComSend);
+  mySDI12.sendCommand("0D0!"); //ask to send the measure
   delay(50);
   String rawdata = readsensor();
   mySDI12.clearBuffer();
@@ -56,20 +49,20 @@ void StartRefSensor(){
   mySDI12.begin();
   delay(2000); //start SDI communication and wait a little for the probe to be ready
   Serial.print(F("'**** Identification of the sensor: "));
-  mySDI12.sendCommand(myComId);
+  mySDI12.sendCommand("0I!");
   delay(300);
   Serial.println(readsensor());
   delay(500);
   mySDI12.clearBuffer();
   
   Serial.print(F("'**** Adress of the sensor: "));
-  mySDI12.sendCommand(myComAdress);
+  mySDI12.sendCommand("?!"); //ask the adress of the probe
   delay(300);
   Serial.println(readsensor());
   delay(500);
   mySDI12.clearBuffer();
   Serial.print(F("'**** Unit 0+(0=m, 1=cm, 2=ft, 3=mbar, 4=psi): "));
-  mySDI12.sendCommand(myComUnit);
+  mySDI12.sendCommand("0OSU!"); //ask for the unit of the measure, +0=m, +1=cm, +2=ft, +3=mbar, +4=psi
   delay(300);
   Serial.println(readsensor());
   delay(500);

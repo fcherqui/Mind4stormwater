@@ -1,6 +1,5 @@
 /* All about the control of the pump
  *  
- *  
  *  Relay shield: HiLetgo 5V 4 Channel Relay Shield for Arduino UNO R3
  *  - relay 3 (NO) or pin 5 safety to power or not the pump (need to be high to power the pump)
  *  - Relay 1 is controlled by digital pin 7
@@ -29,9 +28,7 @@ void pump(String Flow, int Time){                                         //Flow
   if((LevelCheck>1.9&&Flow=="FILL")||(LevelCheck<0&&Flow=="EMPTY")){      //This is a secondary safety check, system should already be protected by UPPER_LIM and LOWER_LIM
     digitalWrite(PumpStop, LOW);                                          //Stops the pump
     Serial.println(F("Something_wrong"));
-    while(1){
-      delay(1000);
-    }
+    while(1){ delay(1000); }
   }
 
   if((Flow=="FILL"&&LevelCheck<1.9)||(LevelCheck<0)){
@@ -59,18 +56,26 @@ void initialFillFunc(){             //Fill up the pipe before beginning
     digitalWrite(PumpOut, LOW);     //Start pumping up
     delay(4000);
     measREFsensor();                //Update LevelCheck
-    Serial.println("'**** (Fast mode)Water level was approx. "+String(LevelCheck,3)+" m & objective= "+String(UPPER_LIM-0.05,3)+" m");
+    Serial.print(F("'**** (Fast mode)Water level was approx. "));
+    Serial.print(String(LevelCheck,3));
+    Serial.print(F(" m & objective= "));
+    Serial.print(String(UPPER_LIM-0.05,3));
+    Serial.println(F(" m"));
   }
   digitalWrite(PumpIn, HIGH);       //stop the pump
   digitalWrite(PumpOut,LOW);        //stop the pump
   delay(3000);                      //time to start to be a little precise!
   measREFsensor();                  //Update LevelCheck
   while(LevelCheck<UPPER_LIM){      //If not already full, will fill
-      Serial.println("'**** (Slow mode)Water level is now approx. "+String(LevelCheck,3)+" m & pumping water for 5 seconds");
+      Serial.print(F("'**** (Slow mode)Water level was approx. "));
+      Serial.print(String(LevelCheck,3));
+      Serial.println(F(" m & pumping water for 5 seconds"));
       pump("FILL",5000);
       measREFsensor();                //Update LevelCheck
   }    
   delay(STABILIZE_TIME);          //Stabilize water level
   measREFsensor();                //Update LevelCheck
-  Serial.println("'**** Level is now "+String(LevelCheck,3)+" m.");
+  Serial.print(F("'**** Level is now "));
+  Serial.print(String(LevelCheck,3));
+  Serial.println(F(" m."));
 }

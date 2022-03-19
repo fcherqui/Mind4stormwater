@@ -11,8 +11,7 @@
  //==> all comments to check!!
 */ 
 String ProcessingCodeVersion="v03_01";
-String filepath="C:\\Users\\nerdguy\\Dropbox\\LOW_COST_SENSORS_Testing-Bench\\91_Live-tests-results\\"; //where to save the results, default: "C:\\Users\\nerdguy\\Dropbox\\LOW_COST_SENSORS_Testing-Bench\\91_Live-tests-results\\"
-
+String filepath="C:\\Users\\nerdguy\\Dropbox\\LOW_COST_SENSORS_Testing-Bench\\91_Live-tests-results\\"; //where to save the results, write your own path...
 //CONFIG//////////
 String comPort="COM8"; //Change for arduino com port (From arduino IDE or device manager) - default "COM3" for the Sony computer and "COM8" for the EliteBook
 import processing.serial.*;

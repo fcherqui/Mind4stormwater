@@ -1,0 +1,111 @@
+#############################
+##### Version History #######
+#############################
+v01: reading voltage in 12 bits?
+v02: save on SD
+v03: multiple pressure probe management
+
+################################
+##### nprobe errors code #######
+################################
+nprobe<10: everything is fine
+nprobe = 10+x : RTC clock missing
+nprobe = 20+x : SD card reader missing
+nprobe = 30+x : RTC + SD missing
+nprobe = 40+x : ADS1115 not connected
+nprobe = 50+x : RTC + ADS1115 missing
+nprobe = 60+x : SD + ADS1115 missing
+nprobe = 70+x : RTC + SD + ADS1115 missing
+
+#########################
+##### Color order #######
+#########################
+WHITE: starts, config pins & establish communication
+Blink WHITE: communication established, (new measure) read time and counter from memory
+YELLOW: starts to measure voltage(s)
+ORANGE: sync time from RTC (if present)
+RED: save on SD card (if present)
+PURPLE: bytizing the data
+GREEN: bytes done, sending the data
+BLUE : data sent, go to sleep or wait
+
+#####################################
+##### Step & time & LED color #######
+#####################################
+
+################################
+##### Preparing the data #######
+################################
+newcounter_1 = int(newcounter//256)
+newcounter_2 = int(newcounter%256)
+volt1_1 = int(volt1//256)
+volt1_2 = int(volt1%256)
+batt_1 = int(battery//256)
+batt_2 = int(battery%256)
+if nprobe>=2:
+    volt2_1 = int(volt2//256)
+    volt2_2 = int(volt2%256)
+if nprobe==3:
+    volt3_1 = int(volt3//256)
+    volt3_2 = int(volt3%256)
+
+if nprobe==1: s.send(bytes([newcounter_1, newcounter_2, nprobe, volt1_1, volt1_2, batt_1, batt_2]))
+if nprobe==2: s.send(bytes([newcounter_1, newcounter_2, nprobe, volt1_1, volt1_2, volt2_1, volt2_2, batt_1, batt_2]))
+if nprobe==3: s.send(bytes([newcounter_1, newcounter_2, nprobe, volt1_1, volt1_2, volt2_1, volt2_2, volt3_1, volt3_2, batt_1, batt_2]))
+
+##################################################
+######### TTN / LoRaWAN PAYLOAD DECODER ##########
+##################################################
+function Decoder(bytes, port){
+  var counter=(bytes[0]*256+bytes[1]);
+  var code=bytes[2];
+  var nprobe=code%10;
+  var volt1=(bytes[3]*256+bytes[4]);
+  var volt2=0;
+  var volt3=0;
+  var battery=0;
+  if (nprobe==1) {battery=(bytes[5]*256+bytes[6]);}
+  if (nprobe==2) {
+    volt2=(bytes[5]*256+bytes[6]);
+    battery=(bytes[7]*256+bytes[8]);
+  }
+  if (nprobe==3) {
+    volt2=(bytes[5]*256+bytes[6]);
+    volt3=(bytes[7]*256+bytes[8]);
+    battery=(bytes[9]*256+bytes[10]);
+  }
+  return{COU:counter,NPRO: nprobe, VOL1:volt1, VOL2:volt2, VOL3:volt3, BAT:battery, CODE:code};
+  //return is always by alphabetical order!!!
+}
+
+##################################################
+######### TTN / LoRaWAN HTTP INTEGRATION #########
+##################################################
+you can do it!!!
+
+#################################
+######### SIGFOX DECODER ########
+#################################
+no decoder, too complicated!!
+
+#################################
+######### SIGFOX CALLBACK #######
+#################################
+Use HTTP Method: POST
+Send SNI checked
+https://script.google.com/...exec?SIT=WTLSigf&DEV={device}&LAT={lat}&LON={lng}&RSSI={rssi}&DAT={data}
+
+########################################
+######### GOOGLE SIGFOX DECODER ########
+########################################
+(NEED TO UPDATE LATER!)
+
+var hextable=[];
+for (var i = 0; i < 8; i++) { hextable[i]=datahex.substring(2*i,2*i+2); } //cut the hex string
+var COU=parseInt(hextable[0],16)*256+parseInt(hextable[1],16);
+var TIM=parseInt(hextable[2],16)*256+parseInt(hextable[3],16);
+var BAT=parseInt(hextable[4],16)/25;
+var TEM=(parseInt(hextable[5],16)*256+parseInt(hextable[6],16))/1000;
+var RHUparsed=parseInt(hextable[7],16);
+var RHU=0;
+if (!isNaN(RHUparsed)) { RHU=RHUparsed/2; } //if air relative humidity is available

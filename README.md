@@ -13,6 +13,9 @@ More information here: https://mind4stormwater.org/monitoring-systems/quirks/
 (Ultrasonic water level)
 More information here: https://mind4stormwater.org/monitoring-systems/wetlandia/
 
+## Pressure sensor (Pycom / Lopy4)
+(Pressure water level)
+
 # Mind4Stormwater project
 More information on the project: https://mind4stormwater.org/
 Live data here: http://mind4stormwater.online/
